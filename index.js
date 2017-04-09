@@ -28,6 +28,8 @@ module.exports.request = function(url, dtlsOpts, callback) {
     url = URL.parse(url)
   }
 
+  console.log("url", url)
+  
   //console.log("sending:" + JSON.stringify(url, 4));
   ipv6 = net.isIPv6(url.hostname || url.host)
 
@@ -51,6 +53,7 @@ module.exports.request = function(url, dtlsOpts, callback) {
       callback(_req);
       //_req.end();
     });
+        
     // dtls wait
     // setTimeout(() => {
     //   callback(agent.request(url, _dtls))
@@ -64,11 +67,11 @@ module.exports.request = function(url, dtlsOpts, callback) {
     else {
       agent = ipv6 ? globalAgentV6 : globalAgent
     }
-
+    
     if (agent._sock) {
       var req =  agent.request(url);
-      req.end();
-      callback(req);
+      //req.end();
+      //callback(req);
       return req;
     }
     else {
