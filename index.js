@@ -9,7 +9,9 @@
 const util = require('util');
 var optionsConv = require('./lib/option_converter'),
   Server = require('./lib/server'),
+  ServerSocket = require('./lib/serverSoket'),    
   Agent = require('./lib/agent'),
+  AgentSocket = require('./lib/agentSocket'),
   parameters = require('./lib/parameters'),
   net = require('net'),
   URL = require('url'),
@@ -81,8 +83,11 @@ module.exports.request = function(url, dtlsOpts, callback) {
 }
 
 module.exports.createServer = Server
+module.exports.createServerSocket = ServerSocket
 
 module.exports.Agent = Agent
+module.exports.AgentSocket = AgentSocket
+
 module.exports.globalAgent = globalAgent
 module.exports.globalAgentIPv6 = globalAgentV6
 

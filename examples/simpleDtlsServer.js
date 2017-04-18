@@ -1,5 +1,6 @@
 var coap    = require('../index');// or coap
 const path    = require('path');
+var   generate = require('coap-packet').generate;
 
 //var SegfaultHandler = require('segfault-handler');
 
@@ -13,7 +14,7 @@ const dtls_opts = {
   handshakeTimeoutMin: 3000
 };
 
-const server  = coap.createServer(
+const server  = coap.createServerSocket(
   {
     dtls: dtls_opts,
     port: 5684,
@@ -21,11 +22,6 @@ const server  = coap.createServer(
     proxy: true
   }
 );
- var  read =  {
-                host: "127.0.0.1",                
-                method: 'GET',
-                pathname: '/3/0/14' 
-            };
 
 
 server.on('request', function(req, res) {
@@ -38,26 +34,38 @@ server.on('request', function(req, res) {
   if(req.method == "POST"){
     console.log('Registration request ended successfully');    
     res.code = '2.1';
-    res.setOption('Location-Path',  'rd/11123131');
+    res.setOption('Location-Path',  'rd/11123131');    
+    
     var address = req.rsinfo.address;
     var port = req.rsinfo.port;     
     const key = `${address}:${port}`;
-    /*
-    var _ag = new coap.AgentSocket({type: 'udp4'}, null, server._dtls_server.sockets[key], function(ag) {
-          read.port = port;        
-          var _req = ag.request(read, null);
+    //var cliente = server._dtls_server.sockets[key];
 
-          _req.on('response', function(res){
-            console.log("response");
-            console.log("_req:", res.code);  
-            console.log("_req:", res.payload.toString("utf-8"));  
-            console.log("create server", res.outSocket)      
-            callback(null, res.outSocket, ag._sock);
-        });
-        _req.end();    
-      });
-    */
-        
+    //server._dtls_server.sockets[key]
+    var _ag = new coap.AgentSocket2({type: 'udp4'}, null, server._dtls_server.sockets[key], function(ag) {
+       var  read =  {
+                host: "127.0.0.1",
+                port:  port,
+                method: 'GET',
+                pathname: '/3/0/14' 
+            };  
+      
+          console.log("read", read)
+          
+          function requesttt(){            
+          var _req = ag.request(read, null, server);
+      
+              _req.on('response', function(res){
+                console.log("response da requisicao\n\n", res);
+                console.log("_req:", res.code);  
+                console.log("_req:", res.payload.toString("utf-8"));  
+            });
+            _req.end();    
+          }
+          setTimeout(requesttt, 1000)                      
+          
+    });
+      
   } else if (req.method == "PUT"){
     console.log('UPDATE ');    
     console.log('Update Request  1.02');        
@@ -66,14 +74,14 @@ server.on('request', function(req, res) {
 	res.code = "2.02";
 	console.log("delete");
   } else if(req.method =="GET"){
-	res.code="2.05"
+	res.code="2.88"
  }else {
     res.code = '1.01';   
-  }  
-  res.end("Acabou galera!!");
+  } 
+  res.end("Acabou!!");
   
   res.on('finish', function(err) {
-    console.log("finish");
+    console.log("finish dtls server");
   })
   
 })

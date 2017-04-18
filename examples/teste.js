@@ -21,17 +21,11 @@ const server  = coap.createServer(
     proxy: true
   }
 );
- var  read =  {
-                host: "127.0.0.1",                
-                method: 'GET',
-                pathname: '/3/0/14' 
-            };
 
 
 server.on('request', function(req, res) {
   
-  console.log('request arrives:\n'+JSON.stringify(req));
-  console.log("rs", req.rsinfo)
+  //console.log('request arrives:\n'+JSON.stringify(req));
   //res.end('Hello ' + req.url.split('/')[1] + '\n')
   
 //res.end('Hello ' + req.url.split('/')[1] + '\n')
@@ -39,25 +33,7 @@ server.on('request', function(req, res) {
     console.log('Registration request ended successfully');    
     res.code = '2.1';
     res.setOption('Location-Path',  'rd/11123131');
-    var address = req.rsinfo.address;
-    var port = req.rsinfo.port;     
-    const key = `${address}:${port}`;
-    /*
-    var _ag = new coap.AgentSocket({type: 'udp4'}, null, server._dtls_server.sockets[key], function(ag) {
-          read.port = port;        
-          var _req = ag.request(read, null);
-
-          _req.on('response', function(res){
-            console.log("response");
-            console.log("_req:", res.code);  
-            console.log("_req:", res.payload.toString("utf-8"));  
-            console.log("create server", res.outSocket)      
-            callback(null, res.outSocket, ag._sock);
-        });
-        _req.end();    
-      });
-    */
-        
+    
   } else if (req.method == "PUT"){
     console.log('UPDATE ');    
     console.log('Update Request  1.02');        

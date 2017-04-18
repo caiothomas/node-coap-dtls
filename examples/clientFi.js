@@ -25,12 +25,11 @@ function create(){
       host: "localhost",
       port: "5683",
       method: 'POST',
-      pathname: "elemento/Room/rd/1", 
-      query: 'ep=sensor01&lt=85671&lwm2m=1.0&b=U',
+      pathname: "/rd", 
+      query: 'ep=caio2&lt=85671&lwm2m=1.0&b=U',
       payload: '</6/0>',
-      agent: true
   };
-
+     
   var agent = new coap.Agent({type: "udp4"});
   var data = '';
 
